@@ -1,0 +1,77 @@
+@import "reset.css";
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.calculator {
+  display: grid;
+  grid-template-rows: auto repeat(5, 82px);
+  gap: 17px;
+  padding: 18px;
+  background: #000000;
+}
+
+div[class^="row"] {
+  display: grid;
+  grid-template-columns: repeat(4, 82px);
+  gap: 17px;
+}
+
+input {
+  grid-column: 1 / span 4;
+  text-align: right;
+  background: #0000;
+  border: none;
+  color: #ffff;
+  font-size: 93px;
+  margin-top: 150px;
+}
+
+input:focus {
+  outline: none;
+}
+
+button {
+  border-radius: 50%;
+  font-size: 30px;
+  border: none;
+  background: #c4c4c4;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.4s;
+}
+
+button:active {
+  background: ;
+}
+
+.row-6 button:first-child {
+  grid-column: 1/3;
+  border-radius: 60px;
+}
+
+.number {
+  background: #333333;
+}
+
+.calc,
+.result-btn {
+  background: #fe9f06;
+  color: #fff;
+}
+
+.number:active,
+.etc-btn:active,
+.reset-btn:active,
+.result-btn:active {
+  opacity: 0.9;
+}
+
+.calc:focus {
+  background: #fff;
+  color: #fe9f06;
+}
