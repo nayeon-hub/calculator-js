@@ -82,10 +82,12 @@ function init() {
     num = "";
     curCal = e.target.innerHTML;
     console.log("a:", startVal, "b:", endVal, curCal);
-    if (endVal !== "") {
+    if (endVal !== "" && check === false) {
       startVal = addFunc(startVal, endVal);
       calInput.value = startVal;
       endVal = "";
+    } else if (endVal !== "" && check === true) {
+      check = false;
     }
   });
   resultBtn.addEventListener("click", () => {
