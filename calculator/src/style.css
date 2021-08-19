@@ -65,10 +65,11 @@ button:active {
 }
 
 .number:active,
-.etc-btn:active,
 .reset-btn:active,
+.etc-btn:active,
+.percentage-btn:active,
 .result-btn:active {
-  opacity: 0.9;
+  opacity: 0.6;
 }
 
 .calc:focus {
