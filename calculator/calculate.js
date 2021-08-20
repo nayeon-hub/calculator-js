@@ -71,7 +71,7 @@ function actCalculate(curCal, startVal, endVal) {
     val = addFunc(startVal, endVal);
   } else if (curCal === "minus") {
     val = minusFunc(startVal, endVal);
-  } else if (curCal === "mutiply") {
+  } else if (curCal === "multiply") {
     val = multiplyFunc(startVal, endVal);
   } else if (curCal === "divide") {
     val = divideFunc(startVal, endVal);
