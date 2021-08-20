@@ -32,6 +32,7 @@ const divideBtn = rowTwoBtns[3];
 const multiplyBtn = rowThreeBtns[3];
 const minusBtn = rowFourBtns[3];
 const plusBtn = rowFiveBtns[3];
+const calBtn = [plusBtn, minusBtn, multiplyBtn, divideBtn];
 const resultBtn = rowSixBtns[2];
 
 let num = "";
@@ -48,8 +49,34 @@ function resetAct() {
   calInput.value = "0";
 }
 
+function multiplyFunc(a, b) {
+  return Number(a) * Number(b);
+}
+
+function minusFunc(a, b) {
+  return Number(a) - Number(b);
+}
+
+function divideFunc(a, b) {
+  return Number(a) / Number(b);
+}
+
 function addFunc(a, b) {
   return Number(a) + Number(b);
+}
+
+function actCalculate(curCal, startVal, endVal) {
+  let val = "";
+  if (curCal === "plus") {
+    val = addFunc(startVal, endVal);
+  } else if (curCal === "minus") {
+    val = minusFunc(startVal, endVal);
+  } else if (curCal === "mutiply") {
+    val = multiplyFunc(startVal, endVal);
+  } else if (curCal === "divide") {
+    val = divideFunc(startVal, endVal);
+  }
+  return val;
 }
 
 function showNum(e) {
@@ -75,23 +102,27 @@ function showNum(e) {
 function init() {
   calInput.value = 0;
   curCal = "";
-  Object.keys(numBtn).forEach((key) => {
-    numBtn[key].addEventListener("click", showNum);
+  Object.values(numBtn).forEach((ele) => {
+    ele.addEventListener("click", showNum);
   });
-  plusBtn.addEventListener("click", (e) => {
-    num = "";
-    curCal = e.target.innerHTML;
-    console.log("a:", startVal, "b:", endVal, curCal);
-    if (endVal !== "" && check === false) {
-      startVal = addFunc(startVal, endVal);
-      calInput.value = startVal;
-      endVal = "";
-    } else if (endVal !== "" && check === true) {
-      check = false;
-    }
+
+  calBtn.forEach((ele) => {
+    ele.addEventListener("click", (e) => {
+      num = "";
+      curCal = e.target.value;
+      console.log("a:", startVal, "b:", endVal, curCal);
+      if (endVal !== "" && check === false) {
+        startVal = actCalculate(curCal, startVal, endVal);
+        calInput.value = startVal;
+        endVal = "";
+      } else if (endVal !== "" && check === true) {
+        check = false;
+      }
+    });
   });
+
   resultBtn.addEventListener("click", () => {
-    startVal = addFunc(startVal, endVal);
+    startVal = actCalculate(curCal, startVal, endVal);
     calInput.value = startVal;
     console.log("a:", startVal, "b:", endVal, curCal);
     check = true;
