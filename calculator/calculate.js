@@ -44,32 +44,18 @@ function resetAct() {
   calInput.value = "0";
 }
 
-function multiplyFunc(a, b) {
-  return Number(a) * Number(b);
-}
-
-function minusFunc(a, b) {
-  return Number(a) - Number(b);
-}
-
-function divideFunc(a, b) {
-  return Number(a) / Number(b);
-}
-
-function addFunc(a, b) {
-  return Number(a) + Number(b);
-}
-
 function actCalculate(curCal, startVal, endVal) {
   let val = "";
+  const a = Math.round((Number(startVal) * 100000) / 100000);
+  const b = Math.round((Number(endVal) * 100000) / 100000);
   if (curCal === "plus") {
-    val = addFunc(startVal, endVal);
+    val = a + b;
   } else if (curCal === "minus") {
-    val = minusFunc(startVal, endVal);
+    val = a - b;
   } else if (curCal === "multiply") {
-    val = multiplyFunc(startVal, endVal);
+    val = a * b;
   } else if (curCal === "divide") {
-    val = divideFunc(startVal, endVal);
+    val = a / b;
   } else {
     val = Number(startVal);
   }
