@@ -46,8 +46,8 @@ function resetAct() {
 
 function actCalculate(curCal, startVal, endVal) {
   let val = "";
-  const a = Math.round((Number(startVal) * 100000) / 100000);
-  const b = Math.round((Number(endVal) * 100000) / 100000);
+  const a = startVal;
+  const b = endVal;
   if (curCal === "plus") {
     val = a + b;
   } else if (curCal === "minus") {
