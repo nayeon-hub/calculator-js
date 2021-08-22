@@ -46,8 +46,8 @@ function resetAct() {
 
 function actCalculate(curCal, startVal, endVal) {
   let val = "";
-  const a = startVal;
-  const b = endVal;
+  const a = Number(startVal);
+  const b = Number(endVal);
   if (curCal === "plus") {
     val = a + b;
   } else if (curCal === "minus") {
@@ -69,8 +69,15 @@ function showNum(e) {
     resetAct();
     check = false;
   }
+
   if (e.target.innerHTML !== ".") {
-    num += e.target.innerHTML;
+    if (num === "0" && e.target.innerHTML === "0") {
+      num = e.target.innerHTML;
+    } else if (num === "-0" && e.target.innerHTML === "0") {
+      num = e.target.innerHTML;
+    } else {
+      num += e.target.innerHTML;
+    }
     calInput.value = num;
   } else {
     if (num === "") {
