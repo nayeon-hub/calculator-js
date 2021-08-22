@@ -64,7 +64,7 @@ function actCalculate(curCal, startVal, endVal) {
 
 function showNum(e) {
   calInput.value = "";
-
+  console.log(check);
   if (check === true) {
     resetAct();
     check = false;
@@ -73,10 +73,13 @@ function showNum(e) {
   if (e.target.innerHTML !== ".") {
     if (num === "0" && e.target.innerHTML === "0") {
       num = e.target.innerHTML;
+      console.log(1, num);
     } else if (num === "-0" && e.target.innerHTML === "0") {
       num = e.target.innerHTML;
+      console.log(2, num);
     } else {
       num += e.target.innerHTML;
+      console.log(3, num);
     }
     calInput.value = num;
   } else {
@@ -106,10 +109,15 @@ function init() {
   });
 
   changeBtn.addEventListener("click", () => {
+    if (check === true) {
+      resetAct();
+      check = false;
+    }
+
     if (num === "") {
       num = "-";
       calInput.value = `${num}0`;
-      console.log("1");
+      console.log("1", num);
     } else if (num !== "" && num[0] !== "-") {
       num = `-${num}`;
       calInput.value = num;
