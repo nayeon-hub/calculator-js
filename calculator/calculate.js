@@ -109,14 +109,18 @@ function init() {
     if (num === "") {
       num = "-";
       calInput.value = `${num}0`;
+      console.log("1");
     } else if (num !== "" && num[0] !== "-") {
       num = `-${num}`;
       calInput.value = num;
       startVal = num;
+      console.log("2");
     } else if (num !== "" && num[0] === "-") {
-      num = `${num.slice(1, -2)}`;
+      num = `${num.slice(1, 3)}`;
+      console.log(num);
       calInput.value = num;
       startVal = num;
+      console.log("3");
     }
   });
 
