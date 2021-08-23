@@ -23,6 +23,7 @@ const numBtn = {
   8: rowThreeBtns[1],
   9: rowThreeBtns[2],
   10: rowSixBtns[1],
+  11: rowTwoBtns[1],
 }; // 10 - 소수점 버튼
 const calBtn = [rowFiveBtns[3], rowFourBtns[3], rowThreeBtns[3], rowTwoBtns[3]]; // + - * ÷
 const resetBtn = rowTwoBtns[0]; // AC
@@ -108,6 +109,25 @@ function showNum(e) {
         }
       }
       break;
+
+    case "+/-":
+      if (num === "") {
+        num = "-";
+        calInput.value = `${num}0`;
+        console.log("1", num);
+      } else if (num !== "" && num[0] !== "-") {
+        num = `-${num}`;
+        calInput.value = num;
+        console.log("2");
+        console.log(num);
+      } else if (num !== "" && num[0] === "-") {
+        num = `${num.slice(1, num.length)}`;
+        console.log(num);
+        calInput.value = num;
+        console.log("3");
+      }
+      break;
+
     default:
       // 일반 숫자 선택했을 경우
       // 1. 첫번째 숫자가 0일때 처리
@@ -122,18 +142,17 @@ function showNum(e) {
         num += e.target.innerHTML;
       }
       calInput.value = num;
-
-      // 2. start값인지 end값인지 판단
-      if (curCal === "") {
-        //사칙연산 하기 전이면 start
-        startVal = num;
-        console.log("num:", num, "a:", startVal, "b:", endVal, curCal, check);
-      } else if (curCal !== "") {
-        //사칙연산 한 후면 end
-        endVal = num;
-        console.log("a:", startVal, "b:", endVal, curCal, check);
-      }
       break;
+  }
+  // 2. start값인지 end값인지 판단
+  if (curCal === "") {
+    //사칙연산 하기 전이면 start
+    startVal = num;
+    console.log("num:", num, "a:", startVal, "b:", endVal, curCal, check);
+  } else if (curCal !== "") {
+    //사칙연산 한 후면 end
+    endVal = num;
+    console.log("a:", startVal, "b:", endVal, curCal, check);
   }
 }
 
@@ -143,28 +162,6 @@ function init() {
   // 숫자 버튼
   Object.values(numBtn).forEach((ele) => {
     ele.addEventListener("click", showNum);
-  });
-
-  // +/- 버튼
-  changeBtn.addEventListener("click", () => {
-    checkCheck();
-
-    if (num === "") {
-      num = "-";
-      calInput.value = `${num}0`;
-      console.log("1", num);
-    } else if (num !== "" && num[0] !== "-") {
-      num = `-${num}`;
-      calInput.value = num;
-      startVal = num;
-      console.log("2");
-    } else if (num !== "" && num[0] === "-") {
-      num = `${num.slice(1, 3)}`;
-      console.log(num);
-      calInput.value = num;
-      startVal = num;
-      console.log("3");
-    }
   });
 
   // % 버튼
