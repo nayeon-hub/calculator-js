@@ -11,6 +11,12 @@ const rowFourBtns = rowFour.querySelectorAll("button");
 const rowFiveBtns = rowFive.querySelectorAll("button");
 const rowSixBtns = rowSix.querySelectorAll("button");
 
+const calBtn = [rowFiveBtns[3], rowFourBtns[3], rowThreeBtns[3], rowTwoBtns[3]]; // + - * ÷
+const resetBtn = rowTwoBtns[0]; // AC
+const changeBtn = rowTwoBtns[1]; // +/-
+const perBtn = rowTwoBtns[2]; // %
+const resultBtn = rowSixBtns[2]; // =
+
 const numBtn = {
   0: rowSixBtns[0],
   1: rowFiveBtns[0],
@@ -24,12 +30,8 @@ const numBtn = {
   9: rowThreeBtns[2],
   10: rowSixBtns[1],
   11: rowTwoBtns[1],
+  12: rowTwoBtns[2],
 }; // 10 - 소수점 버튼
-const calBtn = [rowFiveBtns[3], rowFourBtns[3], rowThreeBtns[3], rowTwoBtns[3]]; // + - * ÷
-const resetBtn = rowTwoBtns[0]; // AC
-const changeBtn = rowTwoBtns[1]; // +/-
-const perBtn = rowTwoBtns[2]; // %
-const resultBtn = rowSixBtns[2]; // =
 
 let num = "";
 let startVal = "";
@@ -67,42 +69,60 @@ function actCalculate(curCal, startVal, endVal) {
       val = a - b;
       break;
     case "multiply":
-      val = a * b;
+      if (b === "") {
+        val = a * 1;
+      } else {
+        val = a * b;
+      }
       break;
     case "divide":
       val = a / b;
       break;
   }
   if (curCal === "") {
+    // 사칙연산을 누르지 않은 상태에서 = 을 눌렀을때 처리
     val = Number(startVal);
   }
   return val;
 }
 
-// 숫자를 보여주는 함수
-// 1. 연속 소수점을 체크함
-// 2. 처음 0을 누르고 그 다음 오는 숫자가 일반 숫자일 때 처리함
-function showNum(e) {
-  calInput.value = "";
-  checkCheck();
+function preprocessorCal(e) {
+  if (endVal !== "" && check === false) {
+    // 두번째 숫자가 없는 상태에서 사칙연산 코드가 들어왔다면 (첫번째 계산, 연속으로 하는 두번째 계산)
+    startVal = actCalculate(curCal, startVal, endVal);
+    calInput.value = startVal;
+    endVal = "";
+  } else if (endVal !== "" && check === true) {
+    // =을 눌러서 계산이 완전히 끝났지만, 이전 결과값을 가지고 더 계산을 하고 싶을 때
+    check = false;
+  }
+  num = "";
+  curCal = e.target.value;
+}
 
-  const n = e.target.innerHTML;
+// 숫자와 관련된 버튼 처리 함수
+function switchNum(n) {
   switch (n) {
-    case ".":
+    case ".": // 소수점 입력
       if (num.indexOf(".") !== -1) {
-        // 이미 소수점이 있으면 ERROR
+        // 소수점이 있으면 ERROR
         calInput.value = "ERROR";
         check = true;
       } else {
+        // 소수점이 없다면?
         if (num === "0" || num === "-0") {
-          // 아무것도 입력되지 않았을 때는 소수점을 누르면 0.
+          // 이미 입력된 숫자가 0이거나 -0일때 소수점 처리
           num = `${num}.`;
           calInput.value = num;
+        } else if (num === "-") {
+          // 숫자 없이 -만 있을 때 소수점 처리
+          num = `${num}0.`;
+          calInput.value = num;
         } else if (num === "") {
+          // 아무것도 입력되지 않았을 때 소수점 처리
           num = "0.";
           calInput.value = num;
         } else {
-          // 소수점이 없으면 PASS
           num += ".";
           calInput.value = num;
           console.log(num);
@@ -110,49 +130,63 @@ function showNum(e) {
       }
       break;
 
-    case "+/-":
+    case "+/-": // "+/-" 기호 입력
       if (num === "") {
+        // 입력된 숫자가 없을 때  -0으로 처리
         num = "-";
         calInput.value = `${num}0`;
-        console.log("1", num);
       } else if (num !== "" && num[0] !== "-") {
+        // 입력된 숫자가 있고 -가 없을때
         num = `-${num}`;
         calInput.value = num;
-        console.log("2");
-        console.log(num);
       } else if (num !== "" && num[0] === "-") {
+        // 입력된 숫자가 있고 -가 있을 때
         num = `${num.slice(1, num.length)}`;
-        console.log(num);
         calInput.value = num;
-        console.log("3");
+      }
+      break;
+
+    case "%":
+      if (num === "") {
+        calInput.value = "0";
+      } else {
+        num = num / 100;
+        calInput.value = num;
       }
       break;
 
     default:
       // 일반 숫자 선택했을 경우
-      // 1. 첫번째 숫자가 0일때 처리
       if (num === "0") {
         // 0이 먼저 입력되어 있을때
-        num = e.target.innerHTML;
+        num = n;
       } else if (num === "-0") {
         // -0이 먼저 입력되어 있을 때
-        num = `-${e.target.innerHTML}`;
+        num = `-${n}`;
       } else {
         // 그 외에 숫자가 들어왔을 때
-        num += e.target.innerHTML;
+        num += n;
       }
       calInput.value = num;
       break;
   }
-  // 2. start값인지 end값인지 판단
+}
+
+// 숫자를 보여주는 함수
+function showNum(e) {
+  calInput.value = "";
+  checkCheck();
+
+  const n = e.target.innerHTML;
+  switchNum(n);
+
+  // start값인지 end값인지 판단
   if (curCal === "") {
     //사칙연산 하기 전이면 start
     startVal = num;
-    console.log("num:", num, "a:", startVal, "b:", endVal, curCal, check);
   } else if (curCal !== "") {
     //사칙연산 한 후면 end
     endVal = num;
-    console.log("a:", startVal, "b:", endVal, curCal, check);
   }
 }
 
@@ -164,39 +198,15 @@ function init() {
     ele.addEventListener("click", showNum);
   });
 
-  // % 버튼
-  perBtn.addEventListener("click", () => {
-    if (num === "") {
-      calInput.value = "0";
-    } else {
-      num = num / 100;
-      calInput.value = num;
-      startVal = num;
-    }
-  });
-
+  // 사칙연산 버튼
   calBtn.forEach((ele) => {
-    ele.addEventListener("click", (e) => {
-      if (endVal !== "" && check === false) {
-        startVal = actCalculate(curCal, startVal, endVal);
-        calInput.value = startVal;
-        endVal = "";
-      } else if (endVal !== "" && check === true) {
-        check = false;
-      }
-
-      num = "";
-      curCal = e.target.value;
-      console.log("num:", num, "a:", startVal, "b:", endVal, curCal, check);
-    });
+    ele.addEventListener("click", preprocessorCal);
   });
 
   resultBtn.addEventListener("click", () => {
     startVal = actCalculate(curCal, startVal, endVal);
-    calInput.value = startVal;
-    console.log("num:", num, "a:", startVal, "b:", endVal, curCal, check);
-
-    check = true;
+    calInput.value = startVal; // 연속 계산을 위한 처리
+    check = true; // 계산이 완료됬음을 알려줌
     num = String(startVal);
   });
   resetBtn.addEventListener("click", resetAct);
