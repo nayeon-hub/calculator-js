@@ -95,8 +95,8 @@ function showNum(e) {
       } else {
         if (num === "0" || num === "-0") {
           // 아무것도 입력되지 않았을 때는 소수점을 누르면 0.
-
-          calInput.value = `${num}.`;
+          num = `${num}.`;
+          calInput.value = num;
         } else if (num === "") {
           num = "0.";
           calInput.value = num;
@@ -104,6 +104,7 @@ function showNum(e) {
           // 소수점이 없으면 PASS
           num += ".";
           calInput.value = num;
+          console.log(num);
         }
       }
       break;
